@@ -4,9 +4,11 @@ struct ContentView: View {
     @State private var checkAmount = ""
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 0
+    @State private var selectedCurrency = 0
     
     let tipPercentages: [Int] = [0, 5, 10, 15, 20, 25]
-    
+    let currencies = ["$", "€", "£", "₹", "¥", "₽","kr"]
+
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentages[tipPercentage])
@@ -16,7 +18,7 @@ struct ContentView: View {
         let amountPerPerson = grandTotal / peopleCount
         return amountPerPerson
     }
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -39,9 +41,18 @@ struct ContentView: View {
                     }
                     .pickerStyle(.segmented)
                 }
+
+                Section(header: Text("Currency")) {
+                    Picker("Select currency", selection: $selectedCurrency) {
+                        ForEach(0..<currencies.count, id: \.self) {
+                            Text(currencies[$0])
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
                 
                 Section {
-                    Text("\(totalPerPerson, specifier: "%.2f")")
+                    Text("\(totalPerPerson, specifier: "%.2f") \(currencies[selectedCurrency])")
                 }
             }
             .navigationTitle("Tip Calculator")
@@ -53,3 +64,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+
