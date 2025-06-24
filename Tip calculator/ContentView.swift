@@ -5,7 +5,7 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 0
     @State private var selectedCurrency = 0
-    
+    @State private var buttonShowCost = false
     let tipPercentages: [Int] = [0, 5, 10, 15, 20, 25]
     let currencies = ["$", "€", "£", "₹", "¥", "₽","kr"]
 
@@ -52,7 +52,25 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Text("\(totalPerPerson, specifier: "%.2f") \(currencies[selectedCurrency])")
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            buttonShowCost.toggle()
+                        }) {
+                            Text("Show cost")
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 8)
+                        }
+                        .background(Color.blue)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .alert("Du behöver betala", isPresented: $buttonShowCost) {
+                            Button("OK") { }
+                        } message: {
+                            Text("\(totalPerPerson, specifier: "%.2f") \(currencies[selectedCurrency])")
+                        }
+                        Spacer()
+                    }
                 }
             }
             .navigationTitle("Tip Calculator")
@@ -64,5 +82,3 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
-
